@@ -14,12 +14,12 @@
 import sys, urllib2, subprocess, argparse, os
 from time import sleep
 from argparse import RawTextHelpFormatter
+
 GREEN = '\033[92m'
 END = '\033[0m'
 RED = '\033[31m'
 
-# Update Functions: 
-
+# Update Functions
 def internet_check(): 
 	try: 
 		urllib2.urlopen("http://www.google.com", timeout=1)
@@ -32,8 +32,8 @@ def internet_check():
 		sys.exit()
 
 def backtrack_update():
-    print GREEN + "[>] Updating & cleaning Backtrack, please wait\n" + END
-    if subprocess.Popen("ls -l /pentest/web/scanners/ 2>/dev/null | grep 0",shell=True).wait() == 0:
+    print GREEN + "[>] Updating & cleaning Backtrack, please wait...\n" + END
+    if subprocess.Popen("ls -l /pentest/web/scanners/ 2>/dev/null | grep -q 0",shell=True).wait() == 0:
 	subprocess.Popen("rm -rf /pentest/web/scanners/",shell=True).wait()
     if subprocess.Popen("apt-get update && apt-get -y dist-upgrade",shell=True).wait() == 0:
         print "\n"
@@ -44,13 +44,13 @@ def backtrack_update():
         sleep(2)
 
 def exploit_db():
-    print GREEN + "[>] Updating Exploit-DB, please wait\n" + END
+    print GREEN + "[>] Updating Exploit-DB, please wait...\n" + END
 
     if subprocess.Popen("cd /pentest/exploits/exploitdb/ && svn up",shell=True).wait() == 0:
         print "\n"
         print GREEN + "[>] Exploit-DB updated successfully!" + END
     else:
-        print RED + "[>] Exploit-DB didn't work. Updating manually...\n" + END    
+        print RED + "[>] Exploit-DB's SVN didn't work. Updating manually. Please wait...\n" + END
         if subprocess.Popen("wget http://www.exploit-db.com/archive.tar.bz2",shell=True).wait() == 0: 
             subprocess.Popen("tar xvfj archive.tar.bz2 > /dev/null", shell=True).wait()
             subprocess.Popen("rm -rf /pentest/exploits/exploitdb/platforms/",shell=True).wait() 
@@ -64,7 +64,7 @@ def exploit_db():
             sleep(2)
 
 def s_e_t():
-    print GREEN + "[>] Updating SET, please wait\n" + END
+    print GREEN + "[>] Updating SET, please wait...\n" + END
 
     if subprocess.Popen("cd /pentest/exploits/set/ && ./set-update",shell=True).wait() == 0:
         print "\n"
@@ -76,7 +76,7 @@ def s_e_t():
 
 def warvox():
     print RED + "[>] The following software has been completely integrated within Metasploit, update might fail!" + END
-    print GREEN + "[>] Updating Warvox, please wait\n" + END
+    print GREEN + "[>] Updating Warvox, please wait...\n" + END
 
     if subprocess.Popen("cd /pentest/telephony/warvox/ && svn up",shell=True).wait() == 0:
         print "\n"
@@ -91,7 +91,7 @@ def warvox():
         sleep(2)
 
 def giskismet():
-    print GREEN + "[>] Updating Giskismet, please wait\n" + END
+    print GREEN + "[>] Updating Giskismet, please wait...\n" + END
 
     if subprocess.Popen("cd /pentest/wireless/giskismet/ && svn up",shell=True).wait() == 0:
         print "\n"
@@ -102,7 +102,7 @@ def giskismet():
         sleep(2)
 
 def dedected():
-    print GREEN + "[>] Updating Dedected, please wait\n" + END
+    print GREEN + "[>] Updating Dedected, please wait...\n" + END
 
     if subprocess.Popen("cd /pentest/telephony/dedected/ && svn up",shell=True).wait() == 0:
         print "\n"
@@ -113,7 +113,7 @@ def dedected():
         sleep(2)
 
 def msf():
-    print GREEN + "[>] Updating Metasploit, please wait\n" + END
+    print GREEN + "[>] Updating Metasploit, please wait...\n" + END
 
     if subprocess.Popen("msfupdate",shell=True).wait() == 0:
         print "\n"
@@ -124,7 +124,7 @@ def msf():
         sleep(2)
 
 def w3af():
-    print GREEN + "[>] Updating W3AF, please wait\n" + END
+    print GREEN + "[>] Updating W3AF, please wait...\n" + END
 
     if subprocess.Popen("cd /pentest/web/w3af/ && svn up",shell=True).wait() == 0:
         print "\n"
@@ -136,7 +136,7 @@ def w3af():
 
 def nikto():
     print RED + "[>] The following software hasn't been updated for an extensive period of time, update might fail!" + END
-    print GREEN + "[>] Updating Nikto, please wait\n" + END
+    print GREEN + "[>] Updating Nikto, please wait...\n" + END
 
     if subprocess.Popen("cd /pentest/web/nikto/ && ./nikto.pl -update",shell=True).wait() == 0:
         print "\n"
@@ -147,7 +147,7 @@ def nikto():
         sleep(2)
 
 def fasttrack():
-    print GREEN + "[>] Updating Fast-track, please wait" + END
+    print GREEN + "[>] Updating Fast-track, please wait...\n" + END
     if subprocess.Popen("cd /pentest/exploits/fasttrack/ && ./fast-track.py -c 1",shell=True).wait() == 0:
         print "\n"
         print GREEN + "[>] Fast-track updated successfully!" + END
@@ -163,7 +163,7 @@ def pyrit():
         print "\n"
         print GREEN + "[>] Pyrit installed!" + END
     else:
-        print GREEN + "[>] Installing Pyrit, please wait\n" + END
+        print GREEN + "[>] Installing Pyrit, please wait...\n" + END
         subprocess.Popen("apt-get -y install libssl-dev scapy python-dev",shell=True).wait()
         subprocess.Popen("svn checkout http://pyrit.googlecode.com/svn/trunk/ pyrit_svn",shell=True).wait()
         subprocess.Popen("cd pyrit_svn/pyrit && python setup.py build && python setup.py install",shell=True).wait()
@@ -173,56 +173,58 @@ def pyrit():
         sleep(2)
 
 def nmap():
-    print GREEN + "[>] Updating Nmap fingerprint, please wait\n" + END
+    print GREEN + "[>] Updating Nmap fingerprint, please wait...\n" + END
 
     if subprocess.Popen("wget http://nmap.org/svn/nmap-os-db -O /usr/local/share/nmap/nmap-os-db",shell=True).wait() == 0:
         print "\n"
         print GREEN + "[>] Nmap fingerprint updated successfully!" + END
     else:
         print "\n"
-        print RED + "[>] Failed to update nmap fingerprint!\n" + END
+        print RED + "[>] Failed to update nmap fingerprint\n" + END
         sleep(2)
 
 def fimap():
-    print GREEN + "[>] Updating Fimap & installing MSF plugin, please wait\n" + END
+    print GREEN + "[>] Updating Fimap & installing MSF plugin, please wait...\n" + END
 
     if subprocess.Popen("cd /pentest/web/fimap/ && ./fimap.py --update-def",shell=True).wait() == 1:
         print "\n"
         print GREEN + "[>] Fimap updated successfully!" + END
     else:
         print "\n"
-        print RED + "[>] Failed to update Fimap!\n" + END
+        print RED + "[>] Failed to update Fimap\n" + END
         sleep(2)
 
 def wpscan():
-    print GREEN + "[>] Updating WPScan, please wait" + END
-    print GREEN + "[>] Installing the required ruby gem, please wait" + END
-    if subprocess.Popen("gem install --user-install nokogiri",shell=True).wait() == 0: 
-	print GREEN + "[>] Ruby gem installed successfully!" + END
-    else: 
-	print RED + "[>] Failed to install ruby gem!\n" + END 
+    print GREEN + "[>] Updating WPScan, please wait...\n" + END
+    
+    if subprocess.Popen("gem list nokogiri | grep -q nokogiri",shell=True).wait() == 1: 
+        print GREEN + "[>] Installing the required ruby gem, please wait...\n" + END
+        if subprocess.Popen("gem install --user-install nokogiri",shell=True).wait() == 0: 
+            print GREEN + "[>] Ruby gem installed successfully!" + END
+        else: 
+            print RED + "[>] Failed to install ruby gem\n" + END 
 
     if subprocess.Popen("cd /pentest/web/wpscan/ && svn up ",shell=True).wait() == 0:
         print "\n"
         print GREEN + "[>] WPScan updated successfully!" + END
     else:
         print "\n"
-        print RED + "[>] Failed to update WPScan!\n" + END
+        print RED + "[>] Failed to update WPScan\n" + END
         sleep(2)
 
 def joomscan():
-    print GREEN + "[>] Updating JoomScan, please wait\n" + END
+    print GREEN + "[>] Updating JoomScan, please wait...\n" + END
 
     if subprocess.Popen("cd /pentest/web/joomscan/ && perl joomscan.pl update",shell=True).wait() == 0:
         print "\n"
         print GREEN + "[>] JoomScan updated successfully!" + END
     else:
         print "\n"
-        print RED + "[>] Failed to update JoomScan!\n" + END
+        print RED + "[>] Failed to update JoomScan\n" + END
         sleep(2)
 
 def sqlmap():
-    print GREEN + "[>] Updating SQLMap, please wait\n" + END
+    print GREEN + "[>] Updating SQLMap, please wait...\n" + END
 
     if subprocess.Popen("cd /pentest/database/sqlmap/ && python sqlmap.py --update",shell=True).wait() == 1:
         print "\n"
@@ -236,11 +238,11 @@ def sqlmap():
         print GREEN + "[>] SQLMap updated successfully!" + END
     else:
         print "\n"
-        print RED + "[>] Failed to update SQLMap!\n" + END
+        print RED + "[>] Failed to update SQLMap\n" + END
         sleep(2)
 
 def hexorbase():
-    print GREEN + "[>] Updating HexorBase please wait\n" + END
+    print GREEN + "[>] Updating HexorBase please wait...\n" + END
 
     if subprocess.Popen("cd /pentest/database/hexorbase/ && svn update",shell=True).wait() == 0:
         print "\n"
@@ -251,22 +253,22 @@ def hexorbase():
         print GREEN + "[>] HexorBase updated successfully!" + END
     else:
         print "\n"
-        print RED + "[>] Failed to update HexorBase!\n" + END
+        print RED + "[>] Failed to update HexorBase\n" + END
         sleep(2)
 
 def sqlninja():
-    print GREEN + "[>] Updating SQLNinja, please wait\n" + END
+    print GREEN + "[>] Updating SQLNinja, please wait...\n" + END
 
     if subprocess.Popen("apt-get remove sqlninja -y && rm -rf /pentest/database/sqlninja && svn co https://sqlninja.svn.sourceforge.net/svnroot/sqlninja /pentest/database/sqlninja",shell=True).wait() == 0:
         print "\n"
         print GREEN + "[>] SQLNinja updated successfully!" + END
     else:
         print "\n"
-        print RED + "[>] Failed to update SQLNinja!\n" + END
+        print RED + "[>] Failed to update SQLNinja\n" + END
         sleep(2)
 
 #def sslstrip():
-#    print GREEN + "[>] Updating SSLStrip, please wait\n" + END
+#    print GREEN + "[>] Updating SSLStrip, please wait...\n" + END
 
 #    if subprocess.Popen("wget http://www.thoughtcrime.org/software/sslstrip/sslstrip-0.9.tar.gz > /dev/null",shell=True).wait() == 0:
 #        subprocess.Popen("apt-get -y purge sslstrip",shell=True).wait()
@@ -279,11 +281,11 @@ def sqlninja():
 #        print GREEN + "[>] SSLStrip updated successfully!" + END
 #    else:
 #        print "\n"
-#        print RED + "[>] Failed to update SSLStrip!\n" + END
+#        print RED + "[>] Failed to update SSLStrip\n" + END
 #        sleep(2)
 
 def openvas():
-    print GREEN + "[>] Updating OpenVAS, please wait\n" + END
+    print GREEN + "[>] Updating OpenVAS, please wait...\n" + END
 
     if subprocess.Popen("openvas-nvt-sync",shell=True).wait() == 0:
         print "\n"
@@ -291,11 +293,11 @@ def openvas():
 
     else:
         print "\n"
-        print RED + "[>] Failed to update OpenVAS!\n" + END
+        print RED + "[>] Failed to update OpenVAS\n" + END
         sleep(2)
 
 def aircrack():
-    print GREEN + "[>] Updating AirCrack-NG & Airodump, please wait\n" + END
+    print GREEN + "[>] Updating AirCrack-NG & Airodump, please wait...\n" + END
 
     subprocess.Popen("apt-get install libssl-dev",shell=True).wait()
     if subprocess.Popen("cd /pentest/wireless/aircrack-ng/ && svn up",shell=True).wait() == 0:
@@ -331,23 +333,25 @@ def tools():
 #    sslstrip()
     openvas()
     aircrack()
+    
 def all(): 
     system()
     tools()
-    
-
+   
 def tryharder():
     print "\n"
     print RED + "[>] Wrong choice, possible choices are: system, tools, all\n" + END
 
 def complete():
+    print GREEN + "[>] Cleaning up, please wait...\n" + END
     subprocess.Popen("apt-get -y autoremove && apt-get clean",shell=True).wait()
+    print GREEN + "[>] Cleaned successfully!" + END
     print "\n"
     print GREEN + "[>] Backtrack update completed successfully!\n" + END
     sys.exit()
 
+# Main
 if __name__ == "__main__": 
-
 	parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description='''[>] Update script for Backtrack 5 R2/R3\n[>] Author: sickness \n[>] Version: 2.0''')
 	parser.add_argument('--update', help="Select what to update: system, tools, all")
 
