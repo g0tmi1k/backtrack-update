@@ -35,7 +35,7 @@ def backtrack_update():
     print GREEN + "[>] Updating & cleaning Backtrack, please wait\n" + END
     if subprocess.Popen("ls -l /pentest/web/scanners/ 2>/dev/null | grep 0",shell=True).wait() == 0:
 	subprocess.Popen("rm -rf /pentest/web/scanners/",shell=True).wait()
-    if subprocess.Popen("apt-get update && apt-get -y dist-upgrade && apt-get autoremove -y && apt-get -y clean",shell=True).wait() == 0:
+    if subprocess.Popen("apt-get update && apt-get -y dist-upgrade",shell=True).wait() == 0:
         print "\n"
         print GREEN + "[>] Backtrack updated & cleaned successfully!" + END
     else:
@@ -49,17 +49,19 @@ def exploit_db():
     if subprocess.Popen("cd /pentest/exploits/exploitdb/ && svn up",shell=True).wait() == 0:
         print "\n"
         print GREEN + "[>] Exploit-DB updated successfully!" + END
-    elif subprocess.Popen("wget http://www.exploit-db.com/archive.tar.bz2",shell=True).wait() == 0: 
-	subprocess.Popen("tar xvfj archive.tar.bz2 > /dev/null", shell=True).wait()
-	subprocess.Popen("rm -rf /pentest/exploits/exploitdb/platforms/",shell=True).wait() 
-	subprocess.Popen("mv -f platforms/ files.csv  /pentest/exploits/exploitdb/",shell=True).wait()
-	subprocess.Popen("rm -rf archive.tar.bz2*",shell=True).wait()
-	print "\n"
-        print GREEN + "[>] Exploit-DB updated successfully!" + END
     else:
-        print "\n"
-        print RED + "[>] Failed to update Exploit-DB\n" + END
-        sleep(2)
+        print RED + "[>] Exploit-DB didn't work. Updating manually...\n" + END    
+        if subprocess.Popen("wget http://www.exploit-db.com/archive.tar.bz2",shell=True).wait() == 0: 
+            subprocess.Popen("tar xvfj archive.tar.bz2 > /dev/null", shell=True).wait()
+            subprocess.Popen("rm -rf /pentest/exploits/exploitdb/platforms/",shell=True).wait() 
+            subprocess.Popen("mv -f platforms/ files.csv /pentest/exploits/exploitdb/",shell=True).wait()
+            subprocess.Popen("rm -rf archive.tar.bz2*",shell=True).wait()
+            print "\n"
+            print GREEN + "[>] Exploit-DB updated successfully!" + END
+        else:
+            print "\n"
+            print RED + "[>] Failed to update Exploit-DB\n" + END
+            sleep(2)
 
 def s_e_t():
     print GREEN + "[>] Updating SET, please wait\n" + END
@@ -145,13 +147,13 @@ def nikto():
         sleep(2)
 
 def fasttrack():
-    print GREEN + "[>] Updating Fasttrack, please wait" + END
+    print GREEN + "[>] Updating Fast-track, please wait" + END
     if subprocess.Popen("cd /pentest/exploits/fasttrack/ && ./fast-track.py -c 1",shell=True).wait() == 0:
         print "\n"
-        print GREEN + "[>] Fasttrack  updated successfully!" + END
+        print GREEN + "[>] Fast-track updated successfully!" + END
     else:
         print "\n"
-        print RED + "[>] Failed to update Fasttrack\n" + END
+        print RED + "[>] Failed to update Fast-track\n" + END
         sleep(2)
 
 def pyrit():
@@ -263,24 +265,22 @@ def sqlninja():
         print RED + "[>] Failed to update SQLNinja!\n" + END
         sleep(2)
 
-def sslstrip():
-    print GREEN + "[>] Updating SSLStrip, please wait\n" + END
-    subprocess.Popen("rm -rf sslstrip*",shell=True).wait()
+#def sslstrip():
+#    print GREEN + "[>] Updating SSLStrip, please wait\n" + END
 
-    if subprocess.Popen("wget http://www.thoughtcrime.org/software/sslstrip/sslstrip-0.9.tar.gz > /dev/null",shell=True).wait() == 0:
-        subprocess.Popen("apt-get -y purge sslstrip",shell=True).wait()
-        subprocess.Popen("tar xvfz sslstrip-0.9.tar.gz",shell=True).wait()
-        subprocess.Popen("rm -rf /pentest/web/sslstrip/",shell=True).wait()
-        subprocess.Popen("mv -f sslstrip-0.9 /pentest/web/sslstrip",shell=True).wait()
-        subprocess.Popen("cd /pentest/web/sslstrip && python ./setup.py install",shell=True).wait()
-        subprocess.Popen("rm -rf sslstrip*",shell=True).wait()
-        print "\n"
-        print GREEN + "[>] SSLStrip updated successfully!" + END
-
-    else:
-        print "\n"
-        print RED + "[>] Failed to update SSLStrip!\n" + END
-        sleep(2)
+#    if subprocess.Popen("wget http://www.thoughtcrime.org/software/sslstrip/sslstrip-0.9.tar.gz > /dev/null",shell=True).wait() == 0:
+#        subprocess.Popen("apt-get -y purge sslstrip",shell=True).wait()
+#        subprocess.Popen("tar xvfz sslstrip-0.9.tar.gz",shell=True).wait()
+#        subprocess.Popen("rm -rf /pentest/web/sslstrip/",shell=True).wait()
+#        subprocess.Popen("mv -f sslstrip-0.9 /pentest/web/sslstrip",shell=True).wait()
+#        subprocess.Popen("cd /pentest/web/sslstrip && python ./setup.py install",shell=True).wait()
+#        subprocess.Popen("rm -rf sslstrip*",shell=True).wait()
+#        print "\n"
+#        print GREEN + "[>] SSLStrip updated successfully!" + END
+#    else:
+#        print "\n"
+#        print RED + "[>] Failed to update SSLStrip!\n" + END
+#        sleep(2)
 
 def openvas():
     print GREEN + "[>] Updating OpenVAS, please wait\n" + END
@@ -309,7 +309,6 @@ def aircrack():
 
 def system():
     backtrack_update()
-    subprocess.Popen("apt-get autoremove -y && apt-get clean",shell=True).wait()
 
 def tools():
     exploit_db()
@@ -329,21 +328,20 @@ def tools():
     sqlmap()
     hexorbase()
     sqlninja()
-    sslstrip()
+#    sslstrip()
     openvas()
     aircrack()
-    subprocess.Popen("apt-get autoremove -y && apt-get clean",shell=True).wait()
-
 def all(): 
     system()
     tools()
-    subprocess.Popen("apt-get autoremove -y && apt-get clean",shell=True).wait()
+    
 
 def tryharder():
     print "\n"
     print RED + "[>] Wrong choice, possible choices are: system, tools, all\n" + END
 
 def complete():
+    subprocess.Popen("apt-get -y autoremove && apt-get clean",shell=True).wait()
     print "\n"
     print GREEN + "[>] Backtrack update completed successfully!\n" + END
     sys.exit()
@@ -351,7 +349,7 @@ def complete():
 if __name__ == "__main__": 
 
 	parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description='''[>] Update script for Backtrack 5 R2/R3\n[>] Author: sickness \n[>] Version: 2.0''')
-	parser.add_argument('--update', help="Select what to update (system, tools, all)")
+	parser.add_argument('--update', help="Select what to update: system, tools, all")
 
 	args = parser.parse_args()
 	if len(sys.argv) > 4: 
@@ -372,6 +370,5 @@ if __name__ == "__main__":
 	elif args.update == "all":
 		all()
 		complete()
-
 	else:
 		tryharder()
