@@ -344,6 +344,7 @@ def tryharder():
 
 def complete():
     print GREEN + "[>] Cleaning up, please wait...\n" + END
+    subprocess.Popen("rm fimap.log",shell=True).wait()
     subprocess.Popen("apt-get -y autoremove && apt-get clean",shell=True).wait()
     print GREEN + "[>] Cleaned successfully!" + END
     print "\n"
