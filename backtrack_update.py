@@ -33,7 +33,7 @@ def internet_check():
 
 def backtrack_update():
     print GREEN + "[>] Updating & cleaning Backtrack, please wait\n" + END
-    if subprocess.Popen("ls -l /pentest/web/scanners/ | grep 0 > /dev/null",shell=True).wait() == 0:
+    if subprocess.Popen("ls -l /pentest/web/scanners/ 2>/dev/null | grep 0",shell=True).wait() == 0:
 	subprocess.Popen("rm -rf /pentest/web/scanners/",shell=True).wait()
     if subprocess.Popen("apt-get update && apt-get -y dist-upgrade && apt-get autoremove -y && apt-get -y clean",shell=True).wait() == 0:
         print "\n"
