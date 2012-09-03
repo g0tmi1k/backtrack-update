@@ -267,23 +267,6 @@ def sqlninja():
         print RED + "[>] Failed to update SQLNinja\n" + END
         sleep(2)
 
-#def sslstrip():
-#    print GREEN + "[>] Updating SSLStrip, please wait...\n" + END
-
-#    if subprocess.Popen("wget http://www.thoughtcrime.org/software/sslstrip/sslstrip-0.9.tar.gz > /dev/null",shell=True).wait() == 0:
-#        subprocess.Popen("apt-get -y purge sslstrip",shell=True).wait()
-#        subprocess.Popen("tar xvfz sslstrip-0.9.tar.gz",shell=True).wait()
-#        subprocess.Popen("rm -rf /pentest/web/sslstrip/",shell=True).wait()
-#        subprocess.Popen("mv -f sslstrip-0.9 /pentest/web/sslstrip",shell=True).wait()
-#        subprocess.Popen("cd /pentest/web/sslstrip && python ./setup.py install",shell=True).wait()
-#        subprocess.Popen("rm -rf sslstrip*",shell=True).wait()
-#        print "\n"
-#        print GREEN + "[>] SSLStrip updated successfully!" + END
-#    else:
-#        print "\n"
-#        print RED + "[>] Failed to update SSLStrip\n" + END
-#        sleep(2)
-
 def openvas():
     print GREEN + "[>] Updating OpenVAS, please wait...\n" + END
 
@@ -308,6 +291,17 @@ def aircrack():
         print "\n"
         print RED + "[>] Failed to update AirCrack-ng\n" + END
         sleep(2)
+        
+def webhandler():
+    print GREEN + "[>] Updating WebHandler, please wait...\n" + END
+
+    if subprocess.Popen("cd /pentest/backdoors/web/webhandler/ && python webhandler.py --update",shell=True).wait() == 0:
+        print "\n"
+        print GREEN + "[>] WebHandler updated successfully!" + END
+    else:
+        print "\n"
+        print RED + "[>] Failed to update WebHandler\n" + END
+        sleep(2)
 
 def system():
     backtrack_update()
@@ -330,9 +324,9 @@ def tools():
     sqlmap()
     hexorbase()
     sqlninja()
-#    sslstrip()
     openvas()
     aircrack()
+    webhandler()
     
 def all(): 
     system()
