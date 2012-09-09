@@ -175,14 +175,22 @@ def pyrit():
         sleep(2)
 
 def nmap():
-    print GREEN + "[>] Updating Nmap fingerprint, please wait...\n" + END
-
+    print GREEN + "[>] Updating Nmap (OS fingerprinting), please wait...\n" + END   
     if subprocess.Popen("wget http://nmap.org/svn/nmap-os-db -O /usr/local/share/nmap/nmap-os-db",shell=True).wait() == 0:
         print "\n"
         print GREEN + "[>] Nmap fingerprint updated successfully!" + END
     else:
         print "\n"
         print RED + "[>] Failed to update nmap fingerprint\n" + END
+        sleep(2)
+
+    print GREEN + "[>] Updating Nmap (scripting engine), please wait...\n" + END   
+    if subprocess.Popen("nmap -script-updatedb",shell=True).wait() == 0:
+        print "\n"
+        print GREEN + "[>] Nmap scripting engine updated successfully!" + END
+    else:
+        print "\n"
+        print RED + "[>] Failed to update nmap  scripting engine\n" + END
         sleep(2)
 
 def fimap():
@@ -390,7 +398,7 @@ def tryharder():
 
 def complete():
     print GREEN + "[>] Cleaning up, please wait...\n" + END
-    subprocess.Popen("rm fimap.log",shell=True).wait()
+    subprocess.Popen("rm /root/fimap.log",shell=True).wait()
     subprocess.Popen("apt-get -y autoremove && apt-get clean",shell=True).wait()
     print GREEN + "[>] Cleaned successfully!" + END
     print "\n"
