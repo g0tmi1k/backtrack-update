@@ -302,6 +302,22 @@ def webhandler():
         print "\n"
         print RED + "[>] Failed to update WebHandler\n" + END
         sleep(2)
+        
+def beef():
+    print GREEN + "[>] Updating BeEF, please wait...\n" + END
+
+    if subprocess.Popen("cd /pentest/web/beef/ && ./update-beef",shell=True).wait() == 0:
+        print "\n"
+        print GREEN + "[>] BeEF updated successfully!" + END
+    else:
+        print RED + "[>] Unable to update BeEF normally. Downloading a fresh copy, please wait...\n" + END
+        if subprocess.Popen("mv -f /pentest/web/beef{,_old} && cd /pentest/web/ && git clone git://github.com/beefproject/beef.git && cd /pentest/web/beef/ && ./update-beef",shell=True).wait() == 0:
+            print "\n"
+            print GREEN + "[>] BeEF updated successfully!" + END
+        else:
+            print "\n"
+            print RED + "[>] Failed to update BeEF\n" + END
+            sleep(2)
 
 def system():
     backtrack_update()
@@ -327,6 +343,7 @@ def tools():
     openvas()
     aircrack()
     webhandler()
+    beef()
     
 def all(): 
     system()
