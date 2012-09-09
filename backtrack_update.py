@@ -33,8 +33,10 @@ def internet_check():
 
 def backtrack_update():
     print GREEN + "[>] Updating & cleaning Backtrack, please wait...\n" + END
+    
     if subprocess.Popen("ls -l /pentest/web/scanners/ 2>/dev/null | grep -q 0",shell=True).wait() == 0:
-	subprocess.Popen("rm -rf /pentest/web/scanners/",shell=True).wait()
+        subprocess.Popen("rm -rf /pentest/web/scanners/",shell=True).wait()
+        
     if subprocess.Popen("apt-get update && apt-get -y dist-upgrade",shell=True).wait() == 0:
         print "\n"
         print GREEN + "[>] Backtrack updated & cleaned successfully!" + END
@@ -328,7 +330,27 @@ def wifite():
     else:
         print "\n"
         print RED + "[>] Failed to update WiFite\n" + END
-        sleep(2)
+        sleep(2) 
+        
+def nessus():
+    if subprocess.Popen("ls -l /opt/nessus/ 2>/dev/null | grep -q 0",shell=True).wait() == 0:
+        print GREEN + "[>] Updating Nessus, please wait...\n" + END
+        nessusrunning = False
+        if subprocess.Popen("ps -A | grep nessus > /dev/null",shell=True).wait() == 0:
+            nessusrunning = True
+            
+        if subprocess.Popen("/etc/init.d/nessusd start && sleep 10 && nessus-update-plugins",shell=True).wait() == 0:
+            print "\n"
+            print GREEN + "[>] Nessus updated successfully!" + END
+        else:
+            print "\n"
+            print RED + "[>] Failed to update Nessus\n" + END
+            sleep(2)
+        
+        if nessusrunning == False:
+            subprocess.Popen("/etc/init.d/nessusd stop",shell=True).wait()
+    else:
+        print RED + "[>] You do not have Nessus installed. Skipping...\n" + END
         
 def system():
     backtrack_update()
@@ -356,6 +378,7 @@ def tools():
     webhandler()
     beef()
     wifite()
+    nessus()
     
 def all(): 
     system()
