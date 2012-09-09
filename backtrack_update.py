@@ -318,7 +318,18 @@ def beef():
             print "\n"
             print RED + "[>] Failed to update BeEF\n" + END
             sleep(2)
+        
+def wifite():
+    print GREEN + "[>] Updating WiFite, please wait...\n" + END
 
+    if subprocess.Popen("cd /pentest/wireless/wifite/ && python wifite.py -upgrade",shell=True).wait() == 0:
+        print "\n"
+        print GREEN + "[>] WiFite updated successfully!" + END
+    else:
+        print "\n"
+        print RED + "[>] Failed to update WiFite\n" + END
+        sleep(2)
+        
 def system():
     backtrack_update()
 
@@ -344,6 +355,7 @@ def tools():
     aircrack()
     webhandler()
     beef()
+    wifite()
     
 def all(): 
     system()
