@@ -341,7 +341,7 @@ def wifite():
         sleep(2) 
         
 def nessus():
-    if subprocess.Popen("ls -l /opt/nessus/ 2>/dev/null | grep -q 0", shell=True).wait() == 0:
+    if subprocess.Popen("ls -l /etc/init.d/nessusd 2>/dev/null | grep -q 0", shell=True).wait() == 0:
         print GREEN + "[>] Updating Nessus, please wait...\n" + END
         nessusrunning = False
         if subprocess.Popen("ps -A | grep nessus > /dev/null", shell=True).wait() == 0:
