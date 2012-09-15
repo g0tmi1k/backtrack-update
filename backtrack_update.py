@@ -207,14 +207,14 @@ def fimap():
 def wpscan():
     print GREEN + "[>] Updating WPScan, please wait...\n" + END
     
-    if subprocess.Popen("gem list nokogiri | grep -q nokogiri", shell=True).wait() == 1: 
+    if subprocess.Popen("find /root/.gem/ruby/*/bin/ -name nokogiri | egrep '.*' > /dev/null", shell=True).wait() == 1:    #gem list nokogiri | grep -q nokogiri
         print GREEN + "[>] Installing the required ruby gem, please wait...\n" + END
         if subprocess.Popen("gem install --user-install nokogiri", shell=True).wait() == 0: 
             print GREEN + "[>] Ruby gem installed successfully!" + END
         else: 
             print RED + "[>] Failed to install ruby gem\n" + END 
 
-    if subprocess.Popen("cd /pentest/web/wpscan/ && svn update", shell=True).wait() == 0:
+    if subprocess.Popen("cd /pentest/web/wpscan/ && ./wpscan.rb --update", shell=True).wait() == 0:
         print "\n"
         print GREEN + "[>] WPScan updated successfully!" + END
     else:
@@ -239,7 +239,7 @@ def sqlmap():
     if subprocess.Popen("cd /pentest/database/sqlmap/ && python sqlmap.py --update", shell=True).wait() == 1:
         print "\n"
         print GREEN + "[>] SQLMap updated successfully!" + END
-    elif subprocess.Popen("cd /pentest/database/sqlmap/ && svn update", shell=True).wait() == 1:
+    elif subprocess.Popen("cd /pentest/database/sqlmap/ && ./sqlmap.py --update", shell=True).wait() == 1: # svn update
         print "\n"
         print GREEN + "[>] SQLMap updated successfully!" + END
     #elif subprocess.Popen("apt-get remove sqlmap && rm -rf /pentest/database/sqlmap/ && svn checkout https://svn.sqlmap.org/sqlmap/trunk/sqlmap /pentest/database/sqlmap/", shell=True).wait() == 1:
@@ -341,7 +341,7 @@ def wifite():
         sleep(2) 
         
 def nessus():
-    if subprocess.Popen("ls -l /opt/nessus/ 2>/dev/null | grep -q 0", shell=True).wait() == 0:
+    if subprocess.Popen("ls -l /etc/init.d/nessusd 2>/dev/null | grep -q 0", shell=True).wait() == 0:
         print GREEN + "[>] Updating Nessus, please wait...\n" + END
         nessusrunning = False
         if subprocess.Popen("ps -A | grep nessus > /dev/null", shell=True).wait() == 0:
